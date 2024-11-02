@@ -6,9 +6,9 @@
         int[,] world = new int[9,9];
         int[,] newworld = new int[9,9];
         world[4,4] = 1;
-        int snakelength = 1;
-        Random randomx = new Random();
-        Random randomy = new Random();
+        int snakelength = 2;
+        
+        MakeApple(ref world);
         
         while (true)
         {
@@ -30,9 +30,19 @@
                             {
                                 case 0:
                                     newworld[i - 1, j] = 1;
+                                    if (world[i - 1, j] == 2)
+                                    {
+                                        MakeApple(ref newworld);
+                                        snakelength++;
+                                    }
                                     break;
                                 case 1:
                                     newworld[i, j - 1] = 1;
+                                    if (world[i, j - 1] == 2)
+                                    {
+                                        MakeApple(ref newworld);
+                                        snakelength++;
+                                    }
                                     break;
                                 case 2:
                                     newworld[i + 1, j] = 1;
@@ -43,7 +53,9 @@
                             }
                             break;
                         case 0:
+                            break;
                         case 2:
+                            newworld[i, j] = 2;
                             break;
                         default:
                             newworld[i, j] = world[i, j] - 1;
@@ -91,7 +103,7 @@
 
     static void Control(ref int dir)
     {
-        switch (Console.ReadKey(true).Key)
+        switch (Console.ReadKey(false).Key)
         {
             case ConsoleKey.UpArrow:
                 dir = 0;
@@ -105,8 +117,21 @@
             case ConsoleKey.LeftArrow:
                 dir = 1;
                 break;
-            case ConsoleKey.None:
-                break;
         }
+    }
+
+    static void MakeApple(ref int[,] wrld)
+    {
+        Random random = new Random();
+        int x, y;
+
+        do
+        {
+            x = random.Next(wrld.GetLength(0));
+            y = random.Next(wrld.GetLength(1));
+            
+        } while (wrld[x,y] != 0);
+
+        wrld[x,y] = 2;
     }
 }
